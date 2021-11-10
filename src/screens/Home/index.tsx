@@ -30,14 +30,34 @@ export function Home() {
 
   async function loadData() {
     const dataKey = '@savepass:logins';
+    const response = await AsyncStorage.getItem(dataKey);
+    const responseFormatted = response ? JSON.parse(response) : [];
+    if (responseFormatted) {
+      setSearchListData(responseFormatted);
+      setData(responseFormatted);
+    }
     // Get asyncStorage data, use setSearchListData and setData
   }
 
   function handleFilterLoginData() {
+    const verifyString = searchText;
+    if (verifyString === '') {
+      return
+    } else {
+      const dataSearchFilttered = data.filter(
+        (search: LoginDataProps) =>
+          search.service_name === searchText
+      )
+      setSearchListData(dataSearchFilttered);
+    }
     // Filter results inside data, save with setSearchListData
   }
 
   function handleChangeInputText(text: string) {
+    setSearchText(text);
+    if (text === '') {
+      setSearchListData(data);
+    }
     // Update searchText value
   }
 
